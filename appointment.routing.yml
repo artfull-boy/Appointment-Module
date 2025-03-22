@@ -1,0 +1,31 @@
+appointment.booking_form:
+  path: '/prendre-un-rendez-vous'
+  defaults:
+    _form: '\Drupal\appointment\Form\MultiStepForm'
+    _title: 'Book an Appointment'
+  requirements:
+    _permission: 'create appointments'
+
+appointment.add_agency:
+  path: '/add-agency'
+  defaults:
+    _form: '\Drupal\appointment\Form\AgencyForm'
+    _title: 'Add Agency'
+  requirements:
+    _permission: 'create agencies'
+
+appointment.add_adviser:
+  path: '/add-adviser'
+  defaults:
+    _form: '\Drupal\appointment\Form\AdviserForm'
+    _title: 'Add Adviser'
+  requirements:
+    _permission: 'create advisers'
+
+appointment.update:
+  path: '/appointment/{appointment}/edit'
+  defaults:
+    _form: '\Drupal\appointment\Form\AppointmentEditForm'
+    _title: 'Edit Appointment'
+  requirements:
+    _permission: 'edit own appointment'

@@ -1,0 +1,53 @@
+<?php
+
+/**
+ * @file
+ * Primary module hooks for Appointment module.
+ */
+
+use Drupal\Core\Routing\RouteMatchInterface;
+
+/**
+ * Implements hook_help().
+ */
+function appointment_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    case 'help.page.appointment':
+      $output = '';
+      $output .= '<h2>' . t('About') . '</h2>';
+      $output .= '<p>' . t('Appointment Booking System is a module that allows users to book appointments.') . '</p>';
+      return $output;
+  }
+}
+
+/**
+ * Implements hook_mail().
+ */
+function appointment_mail($key, &$message, $params)
+{
+  $module_path = \Drupal::service('extension.list.module')->getPath('appointment');
+  switch ($key) {
+    case 'confirmation_user':
+      $message['subject'] = t('Your appointment confirmation');
+      $message['headers']=array(
+        'MIME-Version' => '1.0',
+        'Content-Type' => 'text/html; charset=UTF-8; format=flowed',
+        'Content-Transfer-Encoding' => '8Bit',
+        );
+      $template_path = $module_path . '/templates/appointment-confirmation--user.html.twig';
+      $message['body'][] = \Drupal::service('twig')->render(
+          $template_path,
+          $params
+      );
+      break;
+
+    case 'confirmation_adviser':
+      $message['subject'] = t('New appointment confirmation');
+      $message['headers']['Content-Type'] = 'text/html; charset=UTF-8';
+      $template_path = $module_path . '/templates/appointment-confirmation--adviser.html.twig';
+      $message['body'][] = \Drupal::service('twig')->render(
+          $template_path, $params
+      );
+      break;
+  }
+}

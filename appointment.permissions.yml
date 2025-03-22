@@ -1,0 +1,70 @@
+"administer appointments":
+  title: "Administer appointments"
+  restrict_access: true
+"create appointments":
+  title: "Create appointments"
+  restrict_access: true
+"edit any appointment":
+  title: "Edit any appointment"
+  restrict_access: true
+"delete any appointment":
+  title: "Delete any appointment"
+  restrict_access: true
+"view any appointment":
+  title: "View any appointment"
+  restrict_access: true
+"view own appointment":
+  title: "View own appointment"
+  restrict_access: true
+"edit own appointment":
+  title: "Edit own appointment"
+  restrict_access: true
+"delete own appointment":
+  title: "Delete own appointment"
+  restrict_access: true
+
+# Adviser Entity Permissions
+"administer advisers":
+  title: "Administer advisers"
+  restrict_access: true
+"create advisers":
+  title: "Create advisers"
+  restrict_access: true
+"edit any adviser":
+  title: "Edit any adviser"
+  restrict_access: true
+"delete any adviser":
+  title: "Delete any adviser"
+  restrict_access: true
+"view any adviser":
+  title: "View any adviser"
+  restrict_access: true
+"edit own adviser":
+  title: "Edit own adviser"
+  restrict_access: true
+"delete own adviser":
+  title: "Delete own adviser"
+  restrict_access: true
+
+# Agency Entity Permissions
+"administer agencies":
+  title: "Administer agencies"
+  restrict_access: true
+"create agencies":
+  title: "Create agencies"
+  restrict_access: true
+"edit any agency":
+  title: "Edit any agency"
+  restrict_access: true
+"delete any agency":
+  title: "Delete any agency"
+  restrict_access: true
+"view any agency":
+  title: "View any agency"
+  restrict_access: true
+"edit own agency":
+  title: "Edit own agency"
+  restrict_access: true
+"delete own agency":
+  title: "Delete own agency"
+  restrict_access: true

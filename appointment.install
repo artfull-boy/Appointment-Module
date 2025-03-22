@@ -1,0 +1,181 @@
+<?php
+
+
+/**
+ * Implements hook_install().
+ */
+function appointment_install()
+{
+
+  // Create the taxonomy vocabulary 'appointment_types' if it does not exist.
+  if (!\Drupal\taxonomy\Entity\Vocabulary::load('appointment_types')) {
+    $vocabulary = \Drupal\taxonomy\Entity\Vocabulary::create([
+      'vid' => 'appointment_types',
+      'description' => 'Types of appointments for the booking system.',
+      'name' => 'Appointment Types',
+    ]);
+    $vocabulary->save();
+
+    // Create default terms.
+    $default_terms = [
+      'Consultation',
+      'Business Appointment',
+      'Follow-up',
+      'Initial Meeting',
+      'Professional Staff'
+    ];
+    foreach ($default_terms as $term_name) {
+      $term = \Drupal\taxonomy\Entity\Term::create([
+        'vid' => 'appointment_types',
+        'name' => $term_name,
+      ]);
+      $term->save();
+    }
+  }
+
+  // Create a view for appointments
+  $view = \Drupal\views\Entity\View::create([
+    'id' => 'appointments',
+    'label' => 'Appointments',
+    'module' => 'appointment',
+    'description' => 'A list of all appointments',
+    'tag' => 'default',
+    'base_table' => 'appointment_field_data',
+    'display' => [
+      'default' => [
+        'display_plugin' => 'default',
+        'id' => 'default',
+        'display_title' => 'Master',
+        'position' => 0,
+        'display_options' => [
+          'title' => 'Appointments',
+          'fields' => [
+            'title' => [
+              'id' => 'title',
+              'table' => 'appointment_field_data',
+              'field' => 'title',
+              'label' => 'Title',
+              'settings' => [
+                'link_to_entity' => TRUE,
+              ],
+            ],
+            'name' => [
+              'id' => 'name',
+              'table' => 'appointment_field_data',
+              'field' => 'name',
+              'label' => 'Name',
+            ],
+            'appointment_date' => [
+              'id' => 'appointment_date',
+              'table' => 'appointment_field_data',
+              'field' => 'appointment_date',
+              'label' => 'Date',
+              'settings' => [
+                'date_format' => 'custom',
+                'custom_format' => 'Y-m-d',
+              ],
+            ],
+            'appointment_time' => [
+              'id' => 'appointment_time',
+              'table' => 'appointment_field_data',
+              'field' => 'appointment_time',
+              'label' => 'Time',
+            ],
+            'agency' => [
+              'id' => 'agency',
+              'table' => 'appointment_field_data',
+              'field' => 'agency',
+              'label' => 'Agency',
+            ],
+            'operations' => [
+              'id' => 'operations',
+              'table' => 'appointment',
+              'field' => 'operations',
+              'label' => 'Operations links',
+            ],
+          ],
+          'sorts' => [
+            'created' => [
+              'id' => 'created',
+              'table' => 'appointment_field_data',
+              'field' => 'created',
+              'order' => 'DESC',
+            ],
+          ],
+          'style' => [
+            'type' => 'table',
+          ],
+          'row' => [
+            'type' => 'fields',
+          ],
+          'path' => 'appointments',
+        ],
+      ],
+      'page_1' => [
+        'display_plugin' => 'page',
+        'id' => 'page_1',
+        'display_title' => 'Page',
+        'position' => 1,
+        'display_options' => [
+          'display_extenders' => [],
+          'path' => 'appointments',
+          'menu' => [
+            'type' => 'normal',
+            'title' => 'Appointments',
+            'description' => 'View all appointments',
+            'expanded' => TRUE,
+            'parent' => 'system.admin',
+            'weight' => 10,
+          ],
+          'header' => [
+          'create_appointment_button' => [
+            'id' => 'create_appointment_button',
+            'table' => 'views',
+            'field' => 'custom_text',
+            'empty' => TRUE,
+            'content' => '<a href="/prendre-un-rendez-vous" class="button--primary">Create an Appointment</a>',
+            'format' => 'full_html',
+          ]
+        ],
+        ],
+      ],
+    ],
+  ]);
+
+  $view->save();
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function appointment_uninstall()
+{
+  // Remove the view when the module is uninstalled
+  $view = \Drupal\views\Entity\View::load('appointments');
+  if ($view) {
+    $view->delete();
+  }
+
+  // Delete the taxonomy vocabulary 'appointment_types' and its terms.
+  if ($vocabulary = \Drupal\taxonomy\Entity\Vocabulary::load('appointment_types')) {
+    $vocabulary->delete();
+  }
+
+  // Clear data from custom entity tables.
+  // Adjust the table names as needed (e.g., if using config schema for entities).
+  $tables = [
+    'appointment',
+    'adviser',
+    'agency',
+  ];
+  foreach ($tables as $table) {
+    try {
+      \Drupal::database()->truncate($table)->execute();
+    } catch (\Exception $e) {
+      \Drupal::logger('appointment')->error('Error clearing table @table: @error', [
+        '@table' => $table,
+        '@error' => $e->getMessage(),
+      ]);
+    }
+  }
+}
