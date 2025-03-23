@@ -6,13 +6,6 @@
         "homepage": "https://github.com/artfull-boy/Appointment-Module/tree/master",
         "require": {
         "drupal/core": "^9.4 || ^10 || ^11"
-    },
-        "extra": {
-            "drush": {
-                "services": {
-                    "drush.services.yml": "^10 || ^11"
-                }
-            }
-        }
+    }
     }
     
