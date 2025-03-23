@@ -2,6 +2,7 @@ langcode: en
 status: true
 dependencies:
   config:
+    - system.menu.admin
     - system.menu.main
   module:
     - appointment
@@ -551,13 +552,13 @@ display:
       display_extenders: {  }
       path: admin/structure/appointments
       menu:
-        type: tab
+        type: normal
         title: Appointments
         description: 'View all appointments'
         weight: 10
-        expanded: true
+        expanded: false
         menu_name: admin
-        parent: ''
+        parent: system.admin
         context: '0'
     cache_metadata:
       max-age: -1
