@@ -4,6 +4,9 @@
         "type": "drupal-module",
         "license": "GPL-2.0-or-later",
         "homepage": "https://github.com/artfull-boy/Appointment-Module/tree/master",
+        "require": {
+        "drupal/core": "^9.4 || ^10 || ^11"
+    },
         "extra": {
             "drush": {
                 "services": {
