@@ -7,3 +7,4 @@ dependencies:
   - drupal:views
   - drupal:taxonomy
   - drupal:telephone
+  - drupal:symfony_mailer
