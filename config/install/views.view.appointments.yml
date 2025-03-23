@@ -534,12 +534,14 @@ display:
     display_plugin: page
     position: 1
     display_options:
+      title: 'Admin Appointments'
       access:
         type: perm
         options:
           perm: 'view any appointment'
       defaults:
         access: false
+        title: false
       display_description: ''
       header:
         create_appointment_button:
@@ -553,7 +555,7 @@ display:
       path: admin/structure/appointments
       menu:
         type: normal
-        title: Appointments
+        title: 'Admin Appointments'
         description: 'View all appointments'
         weight: 10
         expanded: false

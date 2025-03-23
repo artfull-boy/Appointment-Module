@@ -1,22 +1,18 @@
-entity.appointment.collection:
-  title: 'Appointments'
-  description: 'List of appointments'
-  route_name: appointment.booking_form
-  parent: system.admin_content
-appointment.appointments_view:
-  title: 'Appointments'
-  description: 'View all appointments'
-  route_name: view.appointments.page_1
-  menu_name: main
-  weight: 10
 appointment.book:
   title: 'Book an Appointment'
   description: 'Book a new appointment'
-  route_name: appointment.book
+  route_name: appointment.booking_form
   menu_name: main
   weight: 10
 appointment.add_adviser:
-  title: 'Add Adviser'
-  description: 'Add a new adviser'
-  parent: entity.user.collection
+  title: 'Add an adviser'
+  description: 'Add a new Adviser'
   route_name: appointment.add_adviser
+  menu_name: main
+  weight: 10
+appointment.add_agency:
+  title: 'Add an agency'
+  description: 'Add a new Agency'
+  route_name: appointment.add_agency
+  menu_name: main
+  weight: 10
