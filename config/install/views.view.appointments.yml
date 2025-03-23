@@ -6,9 +6,14 @@ dependencies:
     - system.menu.main
   module:
     - appointment
+    - better_exposed_filters
+    - csv_serialization
     - datetime
     - options
+    - rest
+    - serialization
     - user
+    - views_data_export
 id: appointments
 label: Appointments
 module: appointment
@@ -334,7 +339,7 @@ display:
       access:
         type: perm
         options:
-          perm: 'view own appointment'
+          perm: 'administer appointments'
       sorts:
         created:
           id: created
@@ -343,111 +348,6 @@ display:
           order: DESC
       arguments: {  }
       filters:
-        adviser:
-          id: adviser
-          table: appointment_field_data
-          field: adviser
-          relationship: none
-          group_type: group
-          admin_label: ''
-          entity_type: appointment
-          entity_field: adviser
-          plugin_id: numeric
-          operator: '='
-          value:
-            min: ''
-            max: ''
-            value: ''
-          group: 1
-          exposed: true
-          expose:
-            operator_id: adviser_op
-            label: Adviser
-            description: ''
-            use_operator: false
-            operator: adviser_op
-            operator_limit_selection: false
-            operator_list: {  }
-            identifier: adviser
-            required: false
-            remember: false
-            multiple: false
-            remember_roles:
-              authenticated: authenticated
-              anonymous: '0'
-              content_editor: '0'
-              administrator: '0'
-              webmaster: '0'
-              customer: '0'
-            min_placeholder: ''
-            max_placeholder: ''
-            placeholder: ''
-          is_grouped: false
-          group_info:
-            label: Adviser
-            description: null
-            identifier: adviser
-            optional: true
-            widget: select
-            multiple: false
-            remember: false
-            default_group: All
-            default_group_multiple: {  }
-            group_items:
-              1: {  }
-              2: {  }
-              3: {  }
-        agency:
-          id: agency
-          table: appointment_field_data
-          field: agency
-          relationship: none
-          group_type: group
-          admin_label: ''
-          entity_type: appointment
-          entity_field: agency
-          plugin_id: numeric
-          operator: '='
-          value:
-            min: ''
-            max: ''
-            value: ''
-          group: 1
-          exposed: true
-          expose:
-            operator_id: agency_op
-            label: Agency
-            description: ''
-            use_operator: false
-            operator: agency_op
-            operator_limit_selection: false
-            operator_list: {  }
-            identifier: agency
-            required: false
-            remember: false
-            multiple: false
-            remember_roles:
-              authenticated: authenticated
-              anonymous: '0'
-              content_editor: '0'
-              administrator: '0'
-              webmaster: '0'
-              customer: '0'
-            min_placeholder: ''
-            max_placeholder: ''
-            placeholder: ''
-          is_grouped: false
-          group_info:
-            label: ''
-            description: ''
-            identifier: ''
-            optional: true
-            widget: select
-            multiple: false
-            remember: false
-            default_group: All
-            default_group_multiple: {  }
-            group_items: {  }
         status:
           id: status
           table: appointment_field_data
@@ -501,10 +401,125 @@ display:
                 title: Rejected
                 operator: '='
                 value: rejected
+        user_id:
+          id: user_id
+          table: adviser_field_data
+          field: user_id
+          relationship: adviser
+          group_type: group
+          admin_label: ''
+          entity_type: adviser
+          entity_field: user_id
+          plugin_id: user_name
+          operator: in
+          value: {  }
+          group: 1
+          exposed: true
+          expose:
+            operator_id: user_id_op
+            label: User
+            description: ''
+            use_operator: false
+            operator: user_id_op
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: user_id
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+              anonymous: '0'
+              content_editor: '0'
+              administrator: '0'
+              webmaster: '0'
+              customer: '0'
+            reduce: false
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+        name:
+          id: name
+          table: agency_field_data
+          field: name
+          relationship: agency
+          group_type: group
+          admin_label: ''
+          entity_type: agency
+          entity_field: name
+          plugin_id: string
+          operator: contains
+          value: ''
+          group: 1
+          exposed: true
+          expose:
+            operator_id: name_op
+            label: Agency
+            description: ''
+            use_operator: false
+            operator: name_op
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: name
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+              anonymous: '0'
+              content_editor: '0'
+              administrator: '0'
+              webmaster: '0'
+              customer: '0'
+            placeholder: ''
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
       style:
         type: table
       row:
         type: fields
+      relationships:
+        adviser:
+          id: adviser
+          table: appointment_field_data
+          field: adviser
+          relationship: none
+          group_type: group
+          admin_label: Adviser
+          entity_type: appointment
+          entity_field: adviser
+          plugin_id: standard
+          required: true
+        agency:
+          id: agency
+          table: appointment_field_data
+          field: agency
+          relationship: none
+          group_type: group
+          admin_label: Agency
+          entity_type: appointment
+          entity_field: agency
+          plugin_id: standard
+          required: true
       header:
         area_text_custom:
           id: area_text_custom
@@ -517,6 +532,7 @@ display:
           empty: true
           content: '<a href="/prendre-un-rendez-vous">Book an Appointment</a>'
           tokenize: false
+      footer: {  }
       display_extenders: {  }
       path: appointments
     cache_metadata:
@@ -528,6 +544,340 @@ display:
         - url.query_args
         - user.permissions
       tags: {  }
+  data_export_1:
+    id: data_export_1
+    display_title: 'CSV Export'
+    display_plugin: data_export
+    position: 3
+    display_options:
+      fields:
+        title:
+          id: title
+          table: appointment_field_data
+          field: title
+          label: Title
+          settings:
+            link_to_entity: true
+        name:
+          id: name
+          table: appointment_field_data
+          field: name
+          label: Name
+        agency:
+          id: agency
+          table: appointment_field_data
+          field: agency
+          label: Agency
+        adviser:
+          id: adviser
+          table: appointment_field_data
+          field: adviser
+          relationship: none
+          group_type: group
+          admin_label: ''
+          entity_type: appointment
+          entity_field: adviser
+          plugin_id: field
+          label: Adviser
+          exclude: false
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: none
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: true
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: true
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          click_sort_column: target_id
+          type: entity_reference_label
+          settings:
+            link: true
+          group_column: target_id
+          group_columns: {  }
+          group_rows: true
+          delta_limit: 0
+          delta_offset: 0
+          delta_reversed: false
+          delta_first_last: false
+          multi_type: separator
+          separator: ', '
+          field_api_classes: false
+        appointment_date:
+          id: appointment_date
+          table: appointment_field_data
+          field: appointment_date
+          relationship: none
+          group_type: group
+          admin_label: ''
+          label: Date
+          exclude: false
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: none
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: true
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: true
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          click_sort_column: value
+          type: datetime_default
+          settings:
+            timezone_override: ''
+            format_type: olivero_medium
+          group_column: value
+          group_columns: {  }
+          group_rows: true
+          delta_limit: 0
+          delta_offset: 0
+          delta_reversed: false
+          delta_first_last: false
+          multi_type: separator
+          separator: ', '
+          field_api_classes: 0
+        appointment_time:
+          id: appointment_time
+          table: appointment_field_data
+          field: appointment_time
+          label: Time
+        appointment_type:
+          id: appointment_type
+          table: appointment_field_data
+          field: appointment_type
+          relationship: none
+          group_type: group
+          admin_label: ''
+          entity_type: appointment
+          entity_field: appointment_type
+          plugin_id: field
+          label: 'Appointment Type'
+          exclude: false
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: none
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: false
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: true
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          click_sort_column: value
+          type: string
+          settings:
+            link_to_entity: false
+          group_column: value
+          group_columns: {  }
+          group_rows: true
+          delta_limit: 0
+          delta_offset: 0
+          delta_reversed: false
+          delta_first_last: false
+          multi_type: separator
+          separator: ', '
+          field_api_classes: false
+        status:
+          id: status
+          table: appointment_field_data
+          field: status
+          relationship: none
+          group_type: group
+          admin_label: ''
+          entity_type: appointment
+          entity_field: status
+          plugin_id: field
+          label: Status
+          exclude: false
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: none
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: true
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: true
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          click_sort_column: value
+          type: list_default
+          settings: {  }
+          group_column: value
+          group_columns: {  }
+          group_rows: true
+          delta_limit: 0
+          delta_offset: 0
+          delta_reversed: false
+          delta_first_last: false
+          multi_type: separator
+          separator: ', '
+          field_api_classes: false
+      filters: {  }
+      filter_groups:
+        operator: AND
+        groups:
+          1: AND
+      style:
+        type: data_export
+        options:
+          formats:
+            csv: csv
+          csv_settings:
+            delimiter: ','
+            enclosure: '"'
+            escape_char: \
+            strip_tags: true
+            trim: true
+            encoding: utf8
+            utf8_bom: '0'
+            use_serializer_encode_only: false
+      defaults:
+        relationships: false
+        fields: false
+        filters: false
+        filter_groups: false
+      relationships: {  }
+      display_description: ''
+      display_extenders: {  }
+      path: admin/appointments/export
+      displays:
+        default: '0'
+        page_1: '0'
+        page_2: '0'
+      filename: ''
+      automatic_download: false
+      export_method: standard
+      export_batch_size: 1000
+      store_in_public_file_directory: null
+      custom_redirect_path: false
+      redirect_to_display: none
+      include_query_params: false
+    cache_metadata:
+      max-age: -1
+      contexts:
+        - 'languages:language_content'
+        - 'languages:language_interface'
+        - request_format
+        - user.permissions
+      tags: {  }
   page_1:
     id: page_1
     display_title: 'Admin View'
@@ -535,6 +885,61 @@ display:
     position: 1
     display_options:
       title: 'Admin Appointments'
+      exposed_form:
+        type: bef
+        options:
+          submit_button: Apply
+          reset_button: true
+          reset_button_label: Reset
+          exposed_sorts_label: 'Sort by'
+          expose_sort_order: true
+          sort_asc_label: Asc
+          sort_desc_label: Desc
+          text_input_required: 'Select any filter and click on Apply to see results'
+          text_input_required_format: basic_html
+          bef:
+            general:
+              autosubmit: true
+              autosubmit_exclude_textfield: false
+              autosubmit_textfield_delay: 300
+              autosubmit_textfield_minimum_length: 2
+              autosubmit_hide: true
+              input_required: false
+              allow_secondary: false
+              secondary_label: 'Advanced options'
+              secondary_open: false
+              reset_button_always_show: false
+            filter:
+              status:
+                plugin_id: default
+                advanced:
+                  placeholder_text: ''
+                  rewrite:
+                    filter_rewrite_values: ''
+                    filter_rewrite_values_key: false
+                  collapsible: false
+                  collapsible_disable_automatic_open: false
+                  is_secondary: false
+                  hide_label: false
+              user_id:
+                plugin_id: default
+                advanced:
+                  placeholder_text: ''
+                  rewrite:
+                    filter_rewrite_values: ''
+                    filter_rewrite_values_key: false
+                  collapsible: false
+                  collapsible_disable_automatic_open: false
+                  is_secondary: false
+                  hide_label: false
+              name:
+                plugin_id: default
+                advanced:
+                  placeholder_text: ''
+                  collapsible: false
+                  collapsible_disable_automatic_open: false
+                  is_secondary: false
+                  hide_label: false
       access:
         type: perm
         options:
@@ -542,15 +947,34 @@ display:
       defaults:
         access: false
         title: false
+        exposed_form: false
+        header: false
+        footer: false
       display_description: ''
       header:
-        create_appointment_button:
-          id: create_appointment_button
+        area_text_custom:
+          id: area_text_custom
           table: views
-          field: custom_text
+          field: area_text_custom
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: text_custom
           empty: true
-          content: '<a href="/prendre-un-rendez-vous" class="button--primary">Create an Appointment</a>'
-          format: full_html
+          content: '<a href="/prendre-un-rendez-vous">Book an Appointment</a>'
+          tokenize: false
+      footer:
+        display_link:
+          id: display_link
+          table: views
+          field: display_link
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: display_link
+          label: 'Export to CSV'
+          empty: false
+          display_id: data_export_1
       display_extenders: {  }
       path: admin/structure/appointments
       menu:
