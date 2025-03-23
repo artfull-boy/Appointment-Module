@@ -8,6 +8,7 @@
         "require": {
         "drupal/core": "^9.4 || ^10 || ^11",
                     "drupal/symfony_mailer": "^1.0",
-                    "drupal/views_data_export": "^1.5"
+                    "drupal/views_data_export": "^1.5",
+                    "drupal/better_exposed_filters": "^7.0"
     }
     }

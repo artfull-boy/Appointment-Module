@@ -9,3 +9,4 @@ dependencies:
   - drupal:telephone
   - drupal:symfony_mailer
   - drupal:views_data_export
+  - drupal:better_exposed_filters
