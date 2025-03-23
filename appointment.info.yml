@@ -6,3 +6,4 @@ package: Custom
 dependencies:
   - drupal:views
   - drupal:taxonomy
+  - drupal:telephone
