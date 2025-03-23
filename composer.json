@@ -1,0 +1,15 @@
+{
+        "name": "drupal/appointment",
+        "description": "Appointment Booking System",
+        "type": "drupal-module",
+        "license": "GPL-2.0-or-later",
+        "homepage": "https://github.com/artfull-boy/Appointment-Module/tree/master",
+        "extra": {
+            "drush": {
+                "services": {
+                    "drush.services.yml": "^10 || ^11"
+                }
+            }
+        }
+    }
+    

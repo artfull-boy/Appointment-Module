@@ -40,12 +40,6 @@ function appointment_install()
  */
 function appointment_uninstall()
 {
-  // Remove the view when the module is uninstalled
-  $view = \Drupal\views\Entity\View::load('appointments');
-  if ($view) {
-    $view->delete();
-  }
-
   // Delete the taxonomy vocabulary 'appointment_types' and its terms.
   if ($vocabulary = \Drupal\taxonomy\Entity\Vocabulary::load('appointment_types')) {
     $vocabulary->delete();
