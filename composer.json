@@ -8,6 +8,6 @@
         "require": {
         "drupal/core": "^9.4 || ^10 || ^11",
                     "drupal/symfony_mailer": "^1.0",
-    "drupal/telephone": "^1.0"
+                    "drupal/views_data_export": "^1.5"
     }
     }
