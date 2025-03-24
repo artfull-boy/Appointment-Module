@@ -1,0 +1,15 @@
+entity.appointment.add_agency:
+  route_name: appointment.add_agency
+  title: 'Add Agency'
+  appears_on:
+    - entity.agency.collection
+appointment.booking_form:
+  route_name: appointment.booking_form
+  title: 'Book an Appointment'
+  appears_on:
+    - entity.appointment.collection
+appointment.add_adviser:
+  route_name: appointment.add_adviser
+  title: 'Add an Adviser'
+  appears_on:
+    - entity.adviser.collection

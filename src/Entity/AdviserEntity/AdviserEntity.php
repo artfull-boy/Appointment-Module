@@ -28,7 +28,7 @@ use Drupal\user\EntityOwnerTrait;
  *   },
  *   handlers = {
  * "access" = "Drupal\appointment\AccessControl\AdviserAccessControlHandler",
- *     "list_builder" = "Drupal\Core\Entity\EntityListBuilder",
+ *     "list_builder" = "Drupal\appointment\ListBuilder\AdviserListBuilder",
  *     "views_data" = "Drupal\views\EntityViewsData",
  *     "form" = {
  *       "default" = "Drupal\Core\Entity\ContentEntityForm",

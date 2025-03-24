@@ -54,7 +54,10 @@ function appointment_uninstall()
   ];
   foreach ($tables as $table) {
     try {
-      \Drupal::database()->truncate($table)->execute();
+      $field_storages = \Drupal::entityTypeManager()->getStorage($table)->loadMultiple();
+      foreach ($field_storages as $field_storage) {
+        $field_storage->delete();
+      }
     } catch (\Exception $e) {
       \Drupal::logger('appointment')->error('Error clearing table @table: @error', [
         '@table' => $table,

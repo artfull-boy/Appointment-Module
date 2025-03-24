@@ -6,6 +6,30 @@ appointment.booking_form:
   requirements:
     _permission: 'create appointments'
 
+entity.appointment.collection:
+  path: '/admin/content/appointments'
+  defaults:
+    _entity_list: 'appointment'
+    _title: 'Appointments'
+  requirements:
+    _permission: 'administer appointments'
+
+entity.agency.collection:
+  path: '/admin/content/agencies'
+  defaults:
+    _entity_list: 'agency'
+    _title: 'Agencies'
+  requirements:
+    _permission: 'administer agencies'
+
+entity.adviser.collection:
+  path: '/admin/content/advisers'
+  defaults:
+    _entity_list: 'adviser'
+    _title: 'Advisers'
+  requirements:
+    _permission: 'administer advisers'
+
 appointment.add_agency:
   path: '/add-agency'
   defaults:

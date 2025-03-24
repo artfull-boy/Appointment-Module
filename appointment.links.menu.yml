@@ -1,18 +1,33 @@
 appointment.book:
-  title: 'Book an Appointment'
-  description: 'Book a new appointment'
+  title: "Book an Appointment"
+  description: "Book a new appointment"
   route_name: appointment.booking_form
   menu_name: main
   weight: 10
 appointment.add_adviser:
-  title: 'Add an adviser'
-  description: 'Add a new Adviser'
+  title: "Add an adviser"
+  description: "Add a new Adviser"
   route_name: appointment.add_adviser
   menu_name: main
   weight: 10
 appointment.add_agency:
-  title: 'Add an agency'
-  description: 'Add a new Agency'
+  title: "Add an agency"
+  description: "Add a new Agency"
   route_name: appointment.add_agency
   menu_name: main
   weight: 10
+entity.agency.collection:
+  title: 'Agencies'
+  description: 'List all agencies'
+  route_name: entity.agency.collection
+  parent: system.admin_content
+entity.appointment.collection:
+  title: 'Appointments'
+  description: 'List all appointments'
+  route_name: entity.appointment.collection
+  parent: system.admin_content
+entity.adviser.collection:
+  title: 'Advisers'
+  description: 'List all advisers'
+  route_name: entity.adviser.collection
+  parent: system.admin_content

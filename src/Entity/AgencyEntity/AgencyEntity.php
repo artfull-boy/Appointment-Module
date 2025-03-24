@@ -14,11 +14,11 @@ use Drupal\Core\Field\BaseFieldDefinition;
  *   label = @Translation("Agency"),
  *   handlers = {
  *     "view_builder" = "Drupal\Core\Entity\EntityViewBuilder",
- *     "list_builder" = "Drupal\appointment\AgencyListBuilder",
+ *     "list_builder" = "Drupal\appointment\ListBuilder\AgencyListBuilder",
  *     "views_data" = "Drupal\views\EntityViewsData",
  *     "form" = {
  *       "add" = "Drupal\appointment\Form\AgencyForm",
- *       "edit" = "Drupal\appointment\Form\AgencyForm",
+ *       "edit" = "Drupal\Core\Entity\ContentEntityForm",
  *       "delete" = "Drupal\Core\Entity\ContentEntityDeleteForm"
  *     },
  *     "route_provider" = {

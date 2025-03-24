@@ -29,7 +29,7 @@ use Drupal\user\EntityOwnerTrait;
  *   },
  *   handlers = {
  * "access" = "Drupal\appointment\AccessControl\AppointmentAccessControlHandler",
- *     "list_builder" = "Drupal\Core\Entity\EntityListBuilder",
+ *     "list_builder" = "Drupal\appointment\ListBuilder\AppointmentListBuilder",
  *     "views_data" = "Drupal\views\EntityViewsData",
  *     "form" = {
  *       "default" = "Drupal\Core\Entity\ContentEntityForm",
