@@ -8,8 +8,23 @@ appointment.booking_form:
   title: 'Book an Appointment'
   appears_on:
     - entity.appointment.collection
+appointment.export_csv:
+  route_name: appointment.export_csv
+  title: 'Export Data'
+  appears_on:
+    - entity.appointment.collection
 appointment.add_adviser:
   route_name: appointment.add_adviser
   title: 'Add an Adviser'
   appears_on:
     - entity.adviser.collection
+advisers.export_csv:
+  route_name: advisers.export_csv
+  title: 'Export Data'
+  appears_on:
+    - entity.adviser.collection
+agencies.export_csv:
+  route_name: agencies.export_csv
+  title: 'Export Data'
+  appears_on:
+    - entity.agency.collection

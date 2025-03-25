@@ -4,6 +4,8 @@ namespace Drupal\appointment\ListBuilder;
 
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityListBuilder;
+use Drupal\Core\Url;
+use Drupal\Core\Link;
 
 
 /**

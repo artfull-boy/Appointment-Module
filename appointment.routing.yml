@@ -53,3 +53,18 @@ appointment.update:
     _title: 'Edit Appointment'
   requirements:
     _permission: 'edit own appointment'
+
+appointment.export_csv:
+  path: '/admin/appointments/export'
+  requirements:
+    _permission: 'administer appointments'
+
+advisers.export_csv:
+  path: '/admin/advisers/export'
+  requirements:
+    _permission: 'administer advisers'
+
+agencies.export_csv:
+  path: '/admin/agencies/export'
+  requirements:
+    _permission: 'administer agencies'

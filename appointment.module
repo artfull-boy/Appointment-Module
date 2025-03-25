@@ -49,5 +49,28 @@ function appointment_mail($key, &$message, $params)
           $template_path, $params
       );
       break;
+
+      case 'edit_user':
+        $message['subject'] = t('Your appointment has been modified');
+        $message['headers']=array(
+          'MIME-Version' => '1.0',
+          'Content-Type' => 'text/html; charset=UTF-8; format=flowed',
+          'Content-Transfer-Encoding' => '8Bit',
+          );
+        $template_path = $module_path . '/templates/appointment-edit--user.html.twig';
+        $message['body'][] = \Drupal::service('twig')->render(
+            $template_path,
+            $params
+        );
+        break;
+  
+      case 'edit_adviser':
+        $message['subject'] = t('Appointment modified');
+        $message['headers']['Content-Type'] = 'text/html; charset=UTF-8';
+        $template_path = $module_path . '/templates/appointment-edit--user.html.twig';
+        $message['body'][] = \Drupal::service('twig')->render(
+            $template_path, $params
+        );
+        break;
   }
 }

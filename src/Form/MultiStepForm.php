@@ -344,7 +344,6 @@ class MultistepForm extends FormBase
                                 '#button_type' => 'primary',
                                 '#disabled' => FALSE,
                         ];
-
                 }
 
 
@@ -484,7 +483,7 @@ class MultistepForm extends FormBase
                                 '@date' => $date,
                                 '@time' => $time,
                         ]),
-                        'user_id'=>\Drupal::currentUser()->id(),
+                        'user_id' => \Drupal::currentUser()->id(),
                         'agency' => $agency,
                         'appointment_type' => $appointment_type,
                         'adviser' => $adviser,
@@ -539,15 +538,15 @@ class MultistepForm extends FormBase
                         TRUE
                 );
 
-                        if ($appointment->id()) {
-                          $this->messenger->addMessage($this->t('Your appointment has been confirmed!'));
-                          $form_state->setRedirect('entity.appointment.canonical', ['appointment' => $appointment->id()]);
-                        } else {
-                          $this->messenger->addMessage($this->t('Error saving the appointment.'), 'error');
-                          $form_state->setRebuild();
-                        }
-                      }
-        
+                if ($appointment->id()) {
+                        $this->messenger->addMessage($this->t('Your appointment has been confirmed!'));
+                        $form_state->setRedirect('entity.appointment.canonical', ['appointment' => $appointment->id()]);
+                } else {
+                        $this->messenger->addMessage($this->t('Error saving the appointment.'), 'error');
+                        $form_state->setRebuild();
+                }
+        }
+
 
         /**
          * Returns available agency options.

@@ -5,6 +5,7 @@ namespace Drupal\appointment\Form;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Mail\MailManagerInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Messenger\MessengerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -16,15 +17,18 @@ class AppointmentEditForm extends FormBase
         protected $entityTypeManager;
         protected $routeMatch;
         protected $messenger;
+        protected $mailManager;
 
         public function __construct(
                 EntityTypeManagerInterface $entity_type_manager,
                 RouteMatchInterface $route_match,
-                MessengerInterface $messenger
+                MessengerInterface $messenger,
+                MailManagerInterface $mail_manager
         ) {
                 $this->entityTypeManager = $entity_type_manager;
                 $this->routeMatch = $route_match;
                 $this->messenger = $messenger;
+                $this->mailManager = $mail_manager;
         }
 
 
@@ -33,7 +37,8 @@ class AppointmentEditForm extends FormBase
                 return new static(
                         $container->get('entity_type.manager'),
                         $container->get('current_route_match'),
-                        $container->get('messenger')
+                        $container->get('messenger'),
+                        $container->get('plugin.manager.mail')
                 );
         }
 
@@ -379,6 +384,47 @@ class AppointmentEditForm extends FormBase
                 $appointment->set('adviser', $adviser);
                 $appointment->set('appointment_date', $date);
                 $appointment->set('appointment_time', $time);
+
+                $params_user = [
+                        'user' => $user_name,
+                        'appointment_date' => $date,
+                        'appointment_time' => $time,
+                        'adviser' => $this->getAdviserName($form_state->get('adviser')),
+                        'agency' => $this->getAgencyName($agency),
+                ];
+                // Get adviser's user email
+                $adviser_entity = $this->entityTypeManager->getStorage('adviser')->load($form_state->get('adviser'));
+                $adviser_user = $adviser_entity->get('user_id')->entity;
+                $adviser_email = $adviser_user->getEmail();
+
+                // Send to user
+                $this->mailManager->mail(
+                        'appointment',
+                        'edit_user',
+                        $form_state->get('user_email'),
+                        \Drupal::languageManager()->getDefaultLanguage()->getId(),
+                        $params_user,
+                        NULL,
+                        TRUE
+                );
+
+                $params_adviser = [
+                        'user' => $user_name,
+                        'appointment_date' => $date,
+                        'appointment_time' => $time,
+                        'adviser' => $this->getAdviserName($adviser),
+                        'agency' => $this->getAgencyName($agency),
+                ];
+                // Send to adviser
+                $this->mailManager->mail(
+                        'appointment',
+                        'edit_adviser',
+                        $adviser_email,
+                        \Drupal::languageManager()->getDefaultLanguage()->getId(),
+                        $params_adviser,
+                        NULL,
+                        TRUE
+                );
 
                 try {
                         $appointment->save();
