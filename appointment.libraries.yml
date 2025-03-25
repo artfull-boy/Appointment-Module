@@ -1,0 +1,38 @@
+appointment_form:
+  version: 1.x
+  css:
+    theme:
+      css/style.css: {}
+
+agency_selection:
+  version: 1.0
+  js:
+    js/agency_selection.js: {}
+    js/appointment_type_selection.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupal
+
+appointment_type_selection:
+  version: 1.0
+  js:
+    js/appointment_type_selection.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupal
+
+adviser_selection:
+  version: 1.0
+  js:
+    js/adviser_selection.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupal
+
+timeslot_selection:
+  version: 1.0
+  js:
+    js/timeslot_selection.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupal

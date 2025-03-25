@@ -1,0 +1,305 @@
+.custom-form-wrapper {
+        background-color: #f9f9f9;
+        padding: 40px;
+        border-radius: 5px;
+}
+
+/* Agency Selection Styling */
+.form-item-agency {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        justify-content: center;
+    }
+    
+    .form-item-agency .form-select {
+        display: none; /* Hide the original select element */
+    }
+    
+    .agency-options {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 20px;
+        width: 100%;
+        max-width: 1000px;
+    }
+    
+    .agency-option {
+        border: 2px solid #e0e0e0;
+        border-radius: 8px;
+        padding: 20px;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        background-color: #fff;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    
+    .agency-option:hover {
+        border-color: #007bff;
+        box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+    }
+    
+    .agency-option.selected {
+        border-color: #007bff;
+        background-color: #f0f7ff;
+    }
+    
+    .agency-option-name {
+        font-weight: bold;
+        color: #333;
+        margin-top: 10px;
+    }
+    
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        .agency-options {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    /* Appointment Type Selection Styling */
+.form-item-appointment-type {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        justify-content: center;
+    }
+    
+    .form-item-appointment-type .form-select {
+        display: none; /* Hide the original select element */
+    }
+    
+    .appointment-type-options {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 20px;
+        width: 100%;
+        max-width: 800px;
+    }
+    
+    .appointment-type-option {
+        border: none;
+        border-radius: 8px;
+        padding: 20px;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        background-color: #f45d4c; /* Coral red from the image */
+        color: white;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+    }
+    
+    .appointment-type-option .appointment-type-icon {
+        width: 50px;
+        height: 50px;
+        margin-bottom: 15px;
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: center;
+    }
+    
+    .appointment-type-option.business-appointments .appointment-type-icon {
+        background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"><path d="M4 6h16v12H4z"/></svg>');
+    }
+    
+    .appointment-type-option.personal-appointments .appointment-type-icon {
+        background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/></svg>');
+    }
+    
+    .appointment-type-option:hover {
+        opacity: 0.9;
+    }
+    
+    .appointment-type-option.selected {
+        box-shadow: 0 0 0 3px white, 0 0 0 6px #f45d4c;
+    }
+    
+    .appointment-type-name {
+        font-weight: bold;
+        font-size: 16px;
+    }
+    
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        .appointment-type-options {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    /* Adviser Selection Styling */
+.form-item-adviser {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+        width: 100%;
+        max-width: 400px;
+        margin: 0 auto;
+    }
+    
+    .form-item-adviser .form-select {
+        display: none; /* Hide the original select element */
+    }
+    
+    .adviser-options {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        gap: 15px;
+    }
+    
+    .adviser-option {
+        border: 2px solid #e0e0e0;
+        border-radius: 10px;
+        padding: 15px;
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        background-color: white;
+    }
+    
+    .adviser-option-profile {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        background-color: #f0f0f0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 15px;
+    }
+    
+    .adviser-option-profile svg {
+        width: 50px;
+        height: 50px;
+        fill: #a0a0a0;
+    }
+    
+    .adviser-option-details {
+        flex-grow: 1;
+    }
+    
+    .adviser-option-name {
+        font-weight: bold;
+        color: #333;
+    }
+    
+    .adviser-option-role {
+        color: #666;
+        font-size: 0.9em;
+    }
+    
+    .adviser-option:hover {
+        border-color: #007bff;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    
+    .adviser-option.selected {
+        border-color: #007bff;
+        background-color: #f0f7ff;
+    }
+    
+    .adviser-actions {
+        display: flex;
+        justify-content: flex-end;
+        width: 100%;
+        max-width: 400px;
+        margin-top: 20px;
+    }
+    
+    .adviser-actions .form-submit {
+        background-color: #007bff;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+    
+    .adviser-actions .form-submit:hover {
+        background-color: #0056b3;
+    }
+    
+    /* Responsive adjustments */
+    @media (max-width: 600px) {
+        .adviser-option {
+            flex-direction: column;
+            text-align: center;
+        }
+        
+        .adviser-option-profile {
+            margin-right: 0;
+            margin-bottom: 10px;
+        }
+    }
+
+    /* Time Slot Selection Styling */
+.form-item-appointment-time {
+        margin-bottom: 20px;
+    }
+    
+    .timeslot-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+        gap: 10px;
+        width: 100%;
+    }
+    
+    .timeslot-option {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 10px;
+        border: 2px solid #e0e0e0;
+        border-radius: 6px;
+        cursor: pointer;
+        text-align: center;
+        font-size: 0.9em;
+        transition: all 0.3s ease;
+        background-color: white;
+    }
+    
+    .timeslot-option:hover {
+        background-color: #f0f0f0;
+        border-color: #007bff;
+    }
+    
+    .timeslot-option.selected {
+        background-color: #007bff;
+        color: white;
+        border-color: #007bff;
+    }
+    
+    .timeslot-option.disabled {
+        color: #cccccc;
+        cursor: not-allowed;
+        background-color: #f9f9f9;
+    }
+    
+    .no-slots-message {
+        text-align: center;
+        color: #666;
+        padding: 20px;
+        background-color: #f9f9f9;
+        border-radius: 8px;
+    }
+    
+    /* Responsive adjustments */
+    @media (max-width: 600px) {
+        .timeslot-grid {
+            grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+            gap: 8px;
+        }
+        
+        .timeslot-option {
+            padding: 8px;
+            font-size: 0.8em;
+        }
+    }

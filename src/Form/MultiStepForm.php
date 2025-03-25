@@ -86,14 +86,12 @@ class MultistepForm extends FormBase
          */
         public function buildForm(array $form, FormStateInterface $form_state)
         {
+                $form['#attached']['library'][] = 'appointment/appointment_form';
                 // Initialize step if not set.
                 if (!$form_state->has('step')) {
                         $form_state->set('step', 1);
                 }
                 $step = $form_state->get('step');
-
-                // Attach library if needed.
-                $form['#attached']['library'][] = 'appointment/appointment_form';
 
                 // Progress indicator (now 7 steps).
                 $form['progress'] = [
@@ -175,7 +173,31 @@ class MultistepForm extends FormBase
                         '#options' => $this->getAgencyOptions(),
                         '#required' => TRUE,
                         '#empty_option' => $this->t('- Select an agency -'),
+                        '#attributes' => [
+                                'class' => ['visually-hidden'], // Hide the original select
+                        ],
                 ];
+                // Create custom agency options markup
+                $form['agency_options'] = [
+                        '#type' => 'container',
+                        '#attributes' => [
+                                'class' => ['agency-options'],
+                        ],
+                ];
+
+                foreach ($this->getAgencyOptions() as $value => $label) {
+                        $form['agency_options'][$value] = [
+                                '#type' => 'container',
+                                '#attributes' => [
+                                        'class' => ['agency-option'],
+                                        'data-value' => $value,
+                                ],
+                                'name' => [
+                                        '#markup' => '<div class="agency-option-name">' . $label . '</div>',
+                                ],
+                        ];
+                }
+
                 $form['actions'] = [
                         '#type' => 'actions',
                 ];
@@ -191,6 +213,8 @@ class MultistepForm extends FormBase
                         '#submit' => ['::nextStep'],
                         '#button_type' => 'primary',
                 ];
+                $form['#attributes']['class'][] = 'form-item-agency';
+                $form['#attached']['library'][] = 'appointment/agency_selection';
                 return $form;
         }
 
@@ -205,7 +229,37 @@ class MultistepForm extends FormBase
                         '#options' => $this->getAppointmentTypeOptions(),
                         '#required' => TRUE,
                         '#empty_option' => $this->t('- Select a type -'),
+                        '#attributes' => [
+                                'class' => ['visually-hidden'], // Hide the original select
+                        ],
                 ];
+
+                // Create custom appointment type options markup
+                $form['appointment_type_options'] = [
+                        '#type' => 'container',
+                        '#attributes' => [
+                                'class' => ['appointment-type-options'],
+                        ],
+                ];
+                $appointment_types = $this->getAppointmentTypeOptions();
+                foreach ($appointment_types as $value => $label) {
+                        $form['appointment_type_options'][$value] = [
+                                '#type' => 'container',
+                                '#attributes' => [
+                                        'class' => [
+                                                'appointment-type-option',
+                                                $value . '-appointments'
+                                        ],
+                                        'data-value' => $value,
+                                ],
+                                'icon' => [
+                                        '#markup' => '<div class="appointment-type-icon"></div>',
+                                ],
+                                'name' => [
+                                        '#markup' => '<div class="appointment-type-name">' . $label . '</div>',
+                                ],
+                        ];
+                }
                 $form['actions'] = [
                         '#type' => 'actions',
                 ];
@@ -221,6 +275,7 @@ class MultistepForm extends FormBase
                         '#submit' => ['::nextStep'],
                         '#button_type' => 'primary',
                 ];
+                $form['#attached']['library'][] = 'appointment/appointment_type_selection';
                 return $form;
         }
 
@@ -238,9 +293,46 @@ class MultistepForm extends FormBase
                         '#options' => $this->getAdviserOptions($agency_id, $appointment_type),
                         '#required' => TRUE,
                         '#empty_option' => $this->t('- Select an adviser -'),
+                        '#attributes' => [
+                                'class' => ['visually-hidden'], // Hide the original select
+                        ],
                 ];
+                // Create custom adviser options markup
+                $form['adviser_options'] = [
+                        '#type' => 'container',
+                        '#attributes' => [
+                                'class' => ['adviser-options'],
+                        ],
+                ];
+
+                $advisers = $this->getAdviserOptions($agency_id, $appointment_type);
+                foreach ($advisers as $value => $label) {
+                        $form['adviser_options'][$value] = [
+                                '#type' => 'container',
+                                '#attributes' => [
+                                        'class' => ['adviser-option'],
+                                        'data-value' => $value,
+                                ],
+                                'profile' => [
+                                        '#markup' => '
+                <div class="adviser-option-profile">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/>
+                    </svg>
+                </div>',
+                                ],
+                                'details' => [
+                                        '#markup' => '
+                <div class="adviser-option-details">
+                    <div class="adviser-option-name">' . $label . '</div>
+                    <div class="adviser-option-role">VOID User</div>
+                </div>',
+                                ],
+                        ];
+                }
+
                 $form['actions'] = [
-                        '#type' => 'actions',
+                        '#type' => 'actions'
                 ];
                 $form['actions']['prev'] = [
                         '#type' => 'submit',
@@ -254,6 +346,8 @@ class MultistepForm extends FormBase
                         '#submit' => ['::nextStep'],
                         '#button_type' => 'primary',
                 ];
+                // Add attached library for JavaScript
+                $form['#attached']['library'][] = 'appointment/adviser_selection';
                 return $form;
         }
 
@@ -302,7 +396,10 @@ class MultistepForm extends FormBase
 
                 $form['timeslot_wrapper'] = [
                         '#type' => 'container',
-                        '#attributes' => ['id' => 'timeslot-wrapper'],
+                        '#attributes' => [
+                                'id' => 'timeslot-wrapper',
+                                'class' => ['timeslot-wrapper'],
+                        ],
                 ];
 
                 // Get available slots dynamically
@@ -336,7 +433,27 @@ class MultistepForm extends FormBase
                                 '#options' => $available_slots,
                                 '#required' => TRUE,
                                 '#empty_option' => $this->t('- Select a time slot -'),
+                                '#attributes' => [
+                                        'class' => ['visually-hidden'],
+                                ],
                         ];
+                        // Create custom time slot grid
+                        $form['timeslot_wrapper']['timeslot_grid'] = [
+                                '#type' => 'container',
+                                '#attributes' => [
+                                        'class' => ['timeslot-grid'],
+                                ],
+                        ];
+                        foreach ($available_slots as $value => $label) {
+                                $form['timeslot_wrapper']['timeslot_grid'][$value] = [
+                                        '#type' => 'container',
+                                        '#attributes' => [
+                                                'class' => ['timeslot-option'],
+                                                'data-value' => $value,
+                                        ],
+                                        '#markup' => $label,
+                                ];
+                        }
                         $form['actions']['next'] = [
                                 '#type' => 'submit',
                                 '#value' => $this->t('Next'),
@@ -346,11 +463,7 @@ class MultistepForm extends FormBase
                         ];
                 }
 
-
-
-
-
-
+                $form['#attached']['library'][] = 'appointment/timeslot_selection';
                 return $form;
         }
 
