@@ -6,11 +6,91 @@
  */
 
 use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\Core\Entity\EntityInterface;
+
+function sendCancellationEmails(EntityInterface $appointment)
+{
+  // Get user details
+  $user_email = $appointment->get('email')->value;
+  $user_name = $appointment->get('name')->value;
+
+  // Get adviser details
+  $adviser = $appointment->get('adviser')->entity;
+  if ($adviser && $adviser->get('user_id')->entity) {
+    $adviser_user = $adviser->get('user_id')->entity;
+    $adviser_email = $adviser_user->getEmail();
+    $adviser_name = $adviser_user->getAccountName();
+  } else {
+    $adviser_email = NULL;
+    $adviser_name = t('Unknown Adviser');
+  }
+
+  // Get appointment details
+  $date = $appointment->get('appointment_date')->value;
+  $time = $appointment->get('appointment_time')->value;
+  $agency = $appointment->get('agency')->entity->label();
+
+  // Prepare parameters
+  $params_user = [
+    'user_name' => $user_name,
+    'date' => $date,
+    'time' => $time,
+    'adviser' => $adviser_name,
+    'agency' => $agency,
+  ];
+
+  $params_adviser = [
+    'user_name' => $user_name,
+    'date' => $date,
+    'time' => $time,
+    'adviser' => $adviser_name,
+    'agency' => $agency,
+  ];
+
+  // Send emails
+  $mail_manager = \Drupal::service('plugin.manager.mail');
+
+  // Send to user
+  $mail_manager->mail(
+    'appointment',
+    'cancellation_user',
+    $user_email,
+    \Drupal::languageManager()->getDefaultLanguage()->getId(),
+    $params_user,
+    NULL,
+    TRUE
+  );
+
+  // Send to adviser
+  if ($adviser_email) {
+    $mail_manager->mail(
+      'appointment',
+      'cancellation_adviser',
+      $adviser_email,
+      \Drupal::languageManager()->getDefaultLanguage()->getId(),
+      $params_adviser,
+      NULL,
+      TRUE
+    );
+  }
+}
+/**
+ * Implements hook_entity_delete().
+ */
+function appointment_entity_delete(EntityInterface $entity)
+{
+  // Only process appointment entities
+  if ($entity->getEntityTypeId() === 'appointment') {
+    sendCancellationEmails($entity);
+  }
+}
+
 
 /**
  * Implements hook_help().
  */
-function appointment_help($route_name, RouteMatchInterface $route_match) {
+function appointment_help($route_name, RouteMatchInterface $route_match)
+{
   switch ($route_name) {
     case 'help.page.appointment':
       $output = '';
@@ -29,15 +109,15 @@ function appointment_mail($key, &$message, $params)
   switch ($key) {
     case 'confirmation_user':
       $message['subject'] = t('Your appointment confirmation');
-      $message['headers']=array(
+      $message['headers'] = array(
         'MIME-Version' => '1.0',
         'Content-Type' => 'text/html; charset=UTF-8; format=flowed',
         'Content-Transfer-Encoding' => '8Bit',
-        );
+      );
       $template_path = $module_path . '/templates/appointment-confirmation--user.html.twig';
       $message['body'][] = \Drupal::service('twig')->render(
-          $template_path,
-          $params
+        $template_path,
+        $params
       );
       break;
 
@@ -46,31 +126,50 @@ function appointment_mail($key, &$message, $params)
       $message['headers']['Content-Type'] = 'text/html; charset=UTF-8';
       $template_path = $module_path . '/templates/appointment-confirmation--adviser.html.twig';
       $message['body'][] = \Drupal::service('twig')->render(
-          $template_path, $params
+        $template_path,
+        $params
       );
       break;
 
-      case 'edit_user':
-        $message['subject'] = t('Your appointment has been modified');
-        $message['headers']=array(
-          'MIME-Version' => '1.0',
-          'Content-Type' => 'text/html; charset=UTF-8; format=flowed',
-          'Content-Transfer-Encoding' => '8Bit',
-          );
-        $template_path = $module_path . '/templates/appointment-edit--user.html.twig';
-        $message['body'][] = \Drupal::service('twig')->render(
-            $template_path,
-            $params
-        );
-        break;
-  
-      case 'edit_adviser':
-        $message['subject'] = t('Appointment modified');
-        $message['headers']['Content-Type'] = 'text/html; charset=UTF-8';
-        $template_path = $module_path . '/templates/appointment-edit--user.html.twig';
-        $message['body'][] = \Drupal::service('twig')->render(
-            $template_path, $params
-        );
-        break;
+    case 'edit_user':
+      $message['subject'] = t('Your appointment has been modified');
+      $message['headers'] = array(
+        'MIME-Version' => '1.0',
+        'Content-Type' => 'text/html; charset=UTF-8; format=flowed',
+        'Content-Transfer-Encoding' => '8Bit',
+      );
+      $template_path = $module_path . '/templates/appointment-edit--user.html.twig';
+      $message['body'][] = \Drupal::service('twig')->render(
+        $template_path,
+        $params
+      );
+      break;
+
+    case 'edit_adviser':
+      $message['subject'] = t('Appointment modified');
+      $message['headers']['Content-Type'] = 'text/html; charset=UTF-8';
+      $template_path = $module_path . '/templates/appointment-edit--user.html.twig';
+      $message['body'][] = \Drupal::service('twig')->render(
+        $template_path,
+        $params
+      );
+      break;
+    case 'cancellation_user':
+      $message['subject'] = t('Your appointment has been cancelled');
+      $template_path = $module_path . '/templates/appointment-cancellation--user.html.twig';
+      $message['body'][] = \Drupal::service('twig')->render(
+        $template_path,
+        $params
+      );
+      break;
+
+    case 'cancellation_adviser':
+      $message['subject'] = t('Appointment cancellation notification');
+      $template_path = $module_path . '/templates/appointment-cancellation--adviser.html.twig';
+      $message['body'][] = \Drupal::service('twig')->render(
+        $template_path,
+        $params
+      );
+      break;
   }
 }
